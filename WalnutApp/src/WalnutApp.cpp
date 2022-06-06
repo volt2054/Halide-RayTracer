@@ -8,6 +8,9 @@
 #include "Walnut/Timer.h"
 
 using namespace Walnut;
+int lightX, lightY;
+int sphereX, sphereY;
+
 
 uint32_t createRGBA(int r, int g, int b, int a)
 {
@@ -72,7 +75,7 @@ class ExampleLayer : public Walnut::Layer
 public:
 	virtual void OnUIRender() override
 	{
-
+		
 		ImGui::Begin("Settings");
 		ImGui::Text("Last render: %.3fms", m_LastRenderTime);
 		if (ImGui::Button("Render"))
@@ -86,6 +89,13 @@ public:
 
 		m_ViewportWidth = ImGui::GetContentRegionAvail().x;
 		m_ViewportHeight = ImGui::GetContentRegionAvail().y;
+
+		
+
+		ImGui::SliderInt("Light X", &lightX, -500, 500);
+		ImGui::SliderInt("Light Y", &lightY, -500, 500);
+		ImGui::SliderInt("Sphere X", &sphereX, -500, 500);
+		ImGui::SliderInt("Sphere y", &sphereY, -500, 500);
 
 		if (m_Image)
 			ImGui::Image(m_Image->GetDescriptorSet(), { (float)m_Image->GetWidth(), (float)m_Image->GetHeight() });
@@ -109,8 +119,10 @@ public:
 			m_ImageData = new uint32_t[m_ViewportHeight * m_ViewportWidth];
 		}
 
-		Sphere sphere(Vec(m_ViewportWidth / 2, m_ViewportHeight / 2, 50), 50);
-		Sphere light(Vec(-500, -1000, 50), 1);
+		//Sphere sphere(Vec(m_ViewportWidth / 2, m_ViewportHeight / 2, 50), 50);
+		Sphere sphere(Vec(sphereX, sphereY, 50), 50);
+		//Sphere light(Vec((int)lightX, -1000, 50), 1);
+		Sphere light(Vec((int)lightX, lightY, 50), 1);
 
 		for (uint32_t y = 0; y < m_ViewportHeight; y++) {
 			for (uint32_t x = 0; x < m_ViewportWidth; x++) { // FOR EACH PIXEL
@@ -138,7 +150,7 @@ public:
 
 					
 					m_ImageData[(y * m_ViewportWidth) + x] = createRGBA(colorrr.r, colorrr.g, colorrr.b, 255);
-					m_ImageData[(y * m_ViewportWidth) + x] |= 0xff0000000;
+					m_ImageData[(y * m_ViewportWidth) + x] |= 0xff000000;
 					//pixel_col = white * dt;
 				}
 
@@ -166,6 +178,7 @@ Walnut::Application* Walnut::CreateApplication(int argc, char** argv)
 {
 	Walnut::ApplicationSpecification spec;
 	spec.Name = "Halide RT";
+	
 
 	Walnut::Application* app = new Walnut::Application(spec);
 	app->PushLayer<ExampleLayer>();
