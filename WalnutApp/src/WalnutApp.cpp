@@ -24,6 +24,7 @@ struct Vec {
 	Vec operator - (Vec v) { return Vec(x - v.x, y - v.x, z - v.z); }
 	Vec operator + (Vec v) { return Vec(x + v.x, y + v.x, z + v.z); }
 	Vec operator * (double d) { return Vec(x * d, y * d, z * d); }
+	double operator * (Vec d) { return (x * d.x + y * d.y * z * d.z); }
 	Vec operator / (double d) { return Vec(x / d, y / d, z / d); }
 	Vec normalize() { double mg = sqrt(x * x + y * y + z * z); return Vec(x / mg, y / mg, z / mg);}
 };
@@ -40,7 +41,7 @@ struct Sphere {
 	Vec c;		// center
 	double r;	// radius
 	Sphere(Vec i, double j) { c = i, r = j; }
-	Vec getNormal(Vec pi) { return (pi-c) / r; }
+	Vec getNormal(Vec pi) { return (pi - c) / r; }
 
 	bool intersect(Ray ray, double& t) {
 		Vec o = ray.o;
