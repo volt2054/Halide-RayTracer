@@ -15,7 +15,7 @@ int sphereX, sphereY;
 uint32_t createRGBA(int r, int g, int b, int a)
 {
 	return ((a & 0xff) << 24)+ ((b & 0xff) << 16) + ((g & 0xff) << 8) + (r & 0xff);
-}
+} 
 
 struct Vec {
 	double x, y, z;
@@ -154,6 +154,7 @@ public:
 					m_ImageData[(y * m_ViewportWidth) + x] |= 0xff000000;
 					//pixel_col = white * dt;
 				}
+				else { m_ImageData[(y * m_ViewportWidth) + x] = 0x00000000; }
 
 				
 
